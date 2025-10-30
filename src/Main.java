@@ -3,6 +3,7 @@ import java.util.Arrays;
 public class Main {
 
     public static void trocarPosicao(double[] vetor, int ind1, int ind2) {
+        System.out.println("INDEX BUBBLE: " + ind1 + ", INDEX SURFACE: " + ind2);
         double aux = vetor[ind1];
         vetor[ind1] = vetor[ind2];
         vetor[ind2] = aux;
@@ -10,33 +11,28 @@ public class Main {
 
     public static double[] bubbleSort(double[] vetor, int deepSize, int surfaceSize) {
         int size = vetor.length;
-        boolean isFirstLoop = (deepSize == 0 && surfaceSize == 0);
 
-        if(isFirstLoop) {
-            deepSize = (size - 1);
-            surfaceSize = size - deepSize;
+        if (surfaceSize >= size - 1) {
+            return vetor;
         }
 
-        int bubbleIndex = 0;
-
-        System.out.println("\n\nBubble: " + vetor[bubbleIndex] + ", Surface: " + vetor[surfaceSize]);
-        System.out.println(Arrays.toString(vetor));
-
-        // Buscar o index do menor valor da esquerda (fundo)
-        for(int deepIndex = deepSize; deepIndex >= 0; deepIndex--) {
-            boolean ehMenorValorDoFundo = vetor[deepIndex] < vetor[bubbleIndex];
-            if(ehMenorValorDoFundo) bubbleIndex = deepIndex;
-            deepSize = deepSize - 1;
-        };
-
-        // Alocar a bubble para surface
-        for(int surfaceIndex = 0; surfaceIndex < surfaceSize; surfaceIndex++) {
-            boolean ehParaIrParaSuperficie = vetor[bubbleIndex] < vetor[surfaceIndex];
-            if(ehParaIrParaSuperficie) trocarPosicao(vetor, bubbleIndex, surfaceIndex);
+        int bubbleIndex = surfaceSize;
+        for (int deepIndex = surfaceSize + 1; deepIndex < size; deepIndex++) {
+            if (vetor[deepIndex] < vetor[bubbleIndex]) {
+                bubbleIndex = deepIndex;
+            }
         }
 
-        return bubbleSort(vetor, size-surfaceSize, surfaceSize + 1);
-    };
+        if (bubbleIndex != surfaceSize) {
+            trocarPosicao(vetor, bubbleIndex, surfaceSize);
+        }
+
+        return bubbleSort(vetor, size, surfaceSize + 1);
+    }
+
+    public static double[] bubbleSort(double[] vetor) {
+        return bubbleSort(vetor, vetor.length, 0);
+    }
 
     public static void main(String[] args) {
         double[] vetor = {6.1, 2.3, 9.4, 5.1, 8.9, 9.8, 10, 7.0, 6.3, 4.4};
